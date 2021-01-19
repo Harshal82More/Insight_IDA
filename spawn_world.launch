@@ -1,0 +1,58 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+  <arg name="paused" default="True"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="rviz" default = "false"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  <arg name="load_grasp_fix" default="true"/>
+
+  <!-- We resume the logic in empty_world.launch -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find mrm_description)/worlds/simple.world"/> 
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include>
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mrm_description)/urdf/mrm.xacro'" /> 
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model mrm -param robot_description"/> 
+  
+  
+  <!-- Start Rviz if needed 
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find mrm_description)/config/mrm.rviz" /> -->
+ 
+  
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="" /> 
+  
+  <!-- TF_Trasformationa -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_target1" args="0.13 1.44 0 0 0 0 1  base_link node"/> -->
+
+  <!-- ROS controller-->
+  <include file = "$(find mrm_description)/launch/spawn_trajectory_control.launch" /> 
+  
+  <!-- Start move_group in the background uncomment line 35 if needed so-->
+  <include file="$(find mrm_moveit_config)/launch/move_group.launch"/>
+  <!-- <include file="$(find mrm_moveit_config)/launch/mrm_planning_execution.launch"/> -->
+  
+  <!-- ar_tags/object to pick -->
+  <include file="$(find ar_tags)/launch/ar_tags.launch"/>  
+  
+  <!-- ar_tags_tracking 
+  <include file="$(find ar_tags)/launch/spawn_artag.launch"/> -->
+  
+  <!-- rqt  -->
+  <!-- <node name="rqt_publisher" pkg="rqt_publisher" type="rqt_publisher" /> 
+  <node name="rqt_tf_tree" pkg="rqt_tf_tree" type="rqt_tf_tree" />  
+  <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />  
+  <node name="rqt_image_view" pkg="rqt_image_view" type="rqt_image_view" />  -->      
+  
+  <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui" /> 
+</launch>

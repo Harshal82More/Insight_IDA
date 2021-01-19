@@ -1,0 +1,7 @@
+<launch>
+	<rosparam file="$(find mrm_description)/config/effort_trajectory_control.yaml" command="load"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/mrm" args="joint_state_controller  mrm_joint_controller  gripper_controller"/>
+
+</launch>
