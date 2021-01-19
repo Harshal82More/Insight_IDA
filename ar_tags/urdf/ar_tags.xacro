@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+
+<robot name="ar_tags">
+
+  <link name = "mol">       
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0" /> 
+        <geometry>
+          <box size = "0.5 0.5 0.1"/>
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0" /> 
+        <geometry>
+            <box size = "0.5 0.5 0.1"/>
+        </geometry>
+      </collision>
+      
+      <inertial>
+        <mass value="5" />
+        <inertia ixx="0.216666666667" ixy="0.0" ixz="0.0" iyy="0.216666666667" iyz="0.0" izz="0.16666666667" />
+      </inertial>
+
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <kinematic>0</kinematic>
+      <enable_wind>0</enable_wind>
+
+ </link>
+ <gazebo reference="mol">
+  <material>Gazebo/White</material>
+ </gazebo>
+ 
+  <joint name="mol_nob" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "0 0 0.12"/> 
+    <parent link="mol"/>
+    <child link="nob"/>
+  </joint>
+
+  <link name = "nob">       
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <cylinder radius = "0.01" length = "0.2"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <cylinder radius = "0.01" length = "0.2"/>
+      </geometry>
+    </collision>
+    
+    <inertial>
+      <mass value="0.01" />
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+    </inertial>
+
+ </link> 
+
+ <gazebo reference="nob">
+    <mu1>100000</mu1>
+    <mu2>100000</mu2>
+    <kp>100000000.0</kp>
+    <kd>1.0</kd>
+    <material>Gazebo/Black</material>
+  </gazebo>
+ 
+   <joint name="holder_nob" type="revolute">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "0.0 0.0 0.1"/> 
+    <parent link="nob"/>
+    <child link="holder"/>
+    <limit effort="5.0" lower="-3.14159265359" upper="3.14159265359" velocity="0.4"/>
+    <dynamics damping="50" friction="1"/>
+   </joint>
+
+   <link name = "holder">       
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0" /> 
+        <geometry>
+          <cylinder radius = "0.035" length = "0.035"/>
+        </geometry>
+      </visual>
+      
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0" /> 
+        <geometry>
+          <cylinder radius = "0.035" length = "0.035"/>
+        </geometry>
+      </collision>
+      
+      <inertial>
+        <mass value="0.01" />
+        <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0" />
+      </inertial>
+ </link> 
+
+  <gazebo reference="holder">
+    <mu1>100000</mu1>
+    <mu2>100000</mu2>
+    <kp>100000000.0</kp>
+    <kd>1.0</kd>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <joint name="mol_tag_1" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "0.2 0.2 0.05"/> 
+    <parent link="mol"/>
+    <child link="tag_1"/>
+  </joint>
+
+ <link name = "tag_1">       
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <mesh filename="package://ar_tags/meshes/1n.dae"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+          <box size = "0.1 0.1 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="mol_tag_2" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "-0.2 0.2 0.05"/> 
+    <parent link="mol"/>
+    <child link="tag_2"/>
+   </joint>
+  
+ <link name = "tag_2">       
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <mesh filename="package://ar_tags/meshes/2n.dae"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+          <box size = "0.1 0.1 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="mol_tag_3" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "0.2 -0.2 0.05"/> 
+    <parent link="mol"/>
+    <child link="tag_3"/>
+   </joint>
+  
+ <link name = "tag_3">       
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <mesh filename="package://ar_tags/meshes/3n.dae"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+          <box size = "0.1 0.1 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+    <joint name="mol_tag_4" type="fixed">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "-0.2 -0.2 0.05"/> 
+    <parent link="mol"/>
+    <child link="tag_4"/>
+   </joint>
+  
+ <link name = "tag_4">       
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+        <mesh filename="package://ar_tags/meshes/4n.dae"/>
+      </geometry>
+    </visual>
+    
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" /> 
+      <geometry>
+          <box size = "0.1 0.1 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+</robot>

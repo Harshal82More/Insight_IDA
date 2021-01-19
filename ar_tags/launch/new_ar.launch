@@ -1,0 +1,30 @@
+<launch>
+
+  <!-- these are the arguments you can pass this launch file, for example paused:=true 
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/> -->
+
+  <!-- We resume the logic in empty_world.launch 
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+  </include> -->
+
+  <!-- Picking object with ar Tags  -->
+  <param name="ar_tags_2020" command="'$(find ar_tags)/urdf/single.urdf'"/>
+  <node name="ar_tags_spawner" pkg="gazebo_ros" type="spawn_model" output="screen"
+  args="-x 0 -y 0 -z 0 -urdf -model  ar_tags -param ar_tags_2020"/>
+
+  <!-- Ensure that the TFs for Turtlebot are made available. -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher"  name="ar_tags_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <remap from="robot_description" to="ar_tags_2020"/>
+  </node>
+  
+</launch>
