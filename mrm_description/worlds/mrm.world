@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <world name="mrm_world">
+   
+    <physics type="ode">
+      <real_time_factor>1</real_time_factor>
+      <!--real_time_update_rate>0</real_time_update_rate-->
+    </physics>
+
+    <!-- Disable shadows. -->
+    <scene>
+      <shadows>true</shadows>
+    </scene>
+
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <joint name="robot_to_world" type="fixed">
+      <parent>world</parent>
+      <child>base_link</child>
+    </joint>
+
+    <joint name="ar_tags_to_world" type="fixed">
+      <parent>world</parent>
+      <child>mole</child>
+    </joint>
+  
+  </world>
+</sdf>

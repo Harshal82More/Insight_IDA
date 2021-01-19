@@ -1,0 +1,57 @@
+mrm:
+  joint_state_controller:
+   type: joint_state_controller/JointStateController
+   publish_rate: 50
+
+  mrm_joint_controller:
+   type: effort_controllers/JointTrajectoryController
+   joints:
+      - base_link__link_01
+      - link_01__link_02
+      - link_02__link_03
+      - link_03__grapple
+
+   constraints:
+    goal_time: 0.5                   # Override default
+    stopped_velocity_tolerance: 0.05 # Override default
+    base_link__link_01:   {trajectory: 0.1, goal: 0.1}
+    link_01__link_02:     {trajectory: 0.1, goal: 0.1}
+    link_02__link_03:     {trajectory: 0.1, goal: 0.1}
+    link_03__grapple:     {trajectory: 0.1, goal: 0.1}                   # Not enforced if unspecified
+
+   gains: # Required because we're controlling an effort interface
+    base_link__link_01: {p: 1000.0, i: 0.5, d: 10.0}
+    link_01__link_02:   {p: 1000.0, i: 0.5, d: 10.0}
+    link_02__link_03:   {p: 1000.0, i: 0.5, d: 10.0}
+    link_03__grapple:   {p: 1000.0, i: 0.5, d: 10.0}
+
+  state_publish_rate:  25            # Override default
+  action_monitor_rate: 30            # Override default
+  stop_trajectory_duration: 0        # Override default
+
+
+  gripper_controller:
+   type: effort_controllers/JointTrajectoryController
+   joints:
+      - finger_joint1
+      - finger_joint2
+      - finger_joint3
+      - finger_joint4
+
+   constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      finger_joint1:   {trajectory: 0.1, goal: 0.1}
+      finger_joint2:   {trajectory: 0.1, goal: 0.1}  
+      finger_joint3:   {trajectory: 0.1, goal: 0.1}
+      finger_joint4:   {trajectory: 0.1, goal: 0.1}                    # Not enforced if unspecified
+
+   gains: # Required because we're controlling an effort interface
+      finger_joint1: {p: 50.0, d: 1.0, i: 0.01, i_clamp: 1.0}
+      finger_joint2: {p: 50.0, d: 1.0, i: 0.01, i_clamp: 1.0}
+      finger_joint3: {p: 50.0, d: 1.0, i: 0.01, i_clamp: 1.0}
+      finger_joint4: {p: 50.0, d: 1.0, i: 0.01, i_clamp: 1.0}
+
+  state_publish_rate:  25            # Override default
+  action_monitor_rate: 30            # Override default
+  stop_trajectory_duration: 0        # Override default

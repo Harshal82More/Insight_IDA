@@ -1,0 +1,539 @@
+<?xml version="1.0"?>
+
+<robot name="mrm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Include materials -->
+
+    <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="Red">
+        <color rgba="0.8 0.0 0.0 1.0"/>
+    </material>
+
+    <material name="White">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+    </material>
+
+
+  <xacro:property name="deg_to_rad" value="0.01745329251994329577"/>
+  
+   <!-- control -->
+   <xacro:macro name="inertial_matrix" params="mass">
+      <inertial>
+      	<mass value="${mass}" />
+        <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="0.5" iyz="0.0" izz="1.0" />
+      </inertial>
+   </xacro:macro>
+
+   <xacro:macro name="transmission_block" params="joint_name">
+	  <transmission name="tran1">
+	    <type>transmission_interface/SimpleTransmission</type>
+	    <joint name="${joint_name}">
+	      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	    </joint>
+	    <actuator name="motor1">
+	      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	      <mechanicalReduction>1</mechanicalReduction>
+	    </actuator>
+	  </transmission>
+   </xacro:macro>
+
+    <!-- Base Link -->
+  <link name = "base_link">       
+          <inertial>
+            <mass value="100" />
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <inertia ixx="175" ixy="0" ixz="0" iyy="175" iyz="0.0" izz="20" />
+          </inertial>
+          
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <box size = "2 2 0.02"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <box size = "2 2 0.02"/>
+            </geometry>
+          </collision>
+
+  </link>
+  <gazebo reference="base_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+
+  <link name = "solar_panel_1">       
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "1" length = "0.02"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "1" length = "0.02"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="solar_panel_1">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <joint name="solar_panel_2__base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "-0.5 -2 0"/> 
+    <parent link="base_link"/>
+    <child link="solar_panel_2"/>
+  </joint>
+  
+  <link name = "solar_panel_2">       
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "1" length = "0.02"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "1" length = "0.02"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+  
+  <gazebo reference="solar_panel_2">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <joint name="solar_panel_1__base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "-0.5 2 0"/> 
+    <parent link="base_link"/>
+    <child link="solar_panel_1"/>
+  </joint>
+
+  <link name = "leg_1">       
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="leg_1_base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "-1 -1 -0.5"/> 
+    <parent link="base_link"/>
+    <child link="leg_1"/>
+  </joint>
+
+  <link name = "leg_2">       
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="leg_2_base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "1 1 -0.5"/> 
+    <parent link="base_link"/>
+    <child link="leg_2"/>
+  </joint>
+
+ <link name = "leg_3">       
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="leg_3_base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "1 -1 -0.5"/> 
+    <parent link="base_link"/>
+    <child link="leg_3"/>
+  </joint>
+  
+   <link name = "leg_4">       
+          
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </visual>
+          
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" /> 
+            <geometry>
+               <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <joint name="leg_4_base_link" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "-1 1 -0.5"/> 
+    <parent link="base_link"/>
+    <child link="leg_4"/>
+  </joint>
+
+
+  <joint name="base_link__link_01" type="revolute">
+    <axis xyz="0 0 1"/>
+    <origin rpy="0 0 0" xyz= "0.85 -0.3 0.02"/> 
+    <parent link="base_link"/>
+    <child link="link_01"/>
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="1.98394848567"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name = "link_01">
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.08" /> 
+            <geometry>
+              <cylinder radius = "0.1" length = "0.2"/>
+            </geometry>
+          </visual>
+
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.08" /> 
+            <geometry>
+              <cylinder radius = "0.1" length = "0.2"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_01">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+  <!--   Link 2-->
+  <joint name="link_01__link_02" type="revolute">
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower = "-3.14" upper = "3.14" velocity="0.5"/>
+    <origin rpy="0 0 0" xyz= "0 0 0.15"/> 
+    <parent link="link_01"/>
+    <child link="link_02"/>
+  </joint>
+
+  <link name = "link_02">
+   <origin rpy="0 0 0" xyz="0 0 0.0" />
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.50" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </visual>
+
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.50" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "1"/>
+            </geometry>
+          </collision>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_02">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <!--   Link 3-->
+  <joint name="link_02__link_03" type="revolute">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 0 0" xyz= "0 0 1"/> 
+    <parent link="link_02"/>
+    <child link="link_03"/>
+    <limit effort="300" velocity="1" lower="-2.61799387799" upper="0.705631162427" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <link name = "link_03">
+
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.4" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "0.8"/>
+            </geometry>
+          <material name="Black" />
+          </visual>
+
+          <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.4" /> 
+            <geometry>
+              <cylinder radius = "0.04" length = "0.8"/>
+            </geometry>
+          </collision>
+
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="link_03">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+ <!-- GRIPPER ROLL LINK -->
+  <joint name="link_03__link_04" type="revolute">
+    <axis xyz="1 0 0"/>
+    <origin rpy="0 0 0" xyz= "0 0 0.8 "/> 
+    <parent link="link_03"/>
+    <child link="link_04"/>
+    <limit effort="300" velocity="1" lower="-3.14" upper="3.14" />
+    <dynamics damping="50" friction="1"/>
+  </joint>
+  
+  <link name="link_04">
+  
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <geometry>
+            <cylinder radius="0.04" length="0.1"/>
+      </geometry>
+    </visual>
+
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.05"/>
+      <geometry>
+            <cylinder radius="0.04" length="0.1"/>
+      </geometry>
+    </collision>
+  <xacro:inertial_matrix mass="1"/>
+
+  </link>
+
+   <joint name="finger_joint1" type="prismatic">
+    <axis xyz="1 0 0"/>
+    <origin rpy="0 0 0" xyz= "0.04 0 0.1 "/> 
+    <parent link="link_04"/>
+    <child link="gripper_finger_link1"/>
+    <limit effort="1" lower="-0.03" upper="0" velocity="1.0"/>
+    <dynamics damping="50" friction="1"/>
+
+      <safety_controller k_position="20"
+                         k_velocity="20"
+                         soft_lower_limit="${-0.15 }"
+                         soft_upper_limit="${ 0.0 }"/>
+
+    <dynamics damping="50" friction="1"/>
+   </joint>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- LEFT GRIPPER AFT LINK -->
+
+  <link name="gripper_finger_link1">
+
+    <visual>
+      <origin xyz="0.0 0 0.05"/>
+      <geometry>
+        <box size="0.01 0.01 0.1"/>
+      </geometry>
+      <material name="red"/>
+    </visual>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="gripper_finger_link1">
+    <material>Gazebo/red</material>
+  </gazebo>
+
+  <!-- Joint between Wrist roll and finger 2 -->
+  <joint name="finger_joint2" type="prismatic">
+    <axis xyz="-1 0 0"/>
+    <origin rpy="0 0 0" xyz= "-0.04 0 0.1 "/> 
+    <parent link="link_04"/>
+    <child link="gripper_finger_link2"/>
+    <limit effort="1" lower="-0.03" upper="0" velocity="1.0"/>
+    <dynamics damping="50" friction="1"/>
+  </joint>
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- RIGHT GRIPPER AFT LINK -->
+  <link name="gripper_finger_link2">
+
+    <visual>
+      <origin xyz="-0.0 0 0.05"/>
+      <geometry>
+        <box size="0.01 0.01 0.1"/>
+      </geometry>
+    <material name="red"/>
+    </visual>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+  
+  <gazebo reference="gripper_finger_link2">
+    <material>Gazebo/red</material>
+  </gazebo>
+
+  <!-- Base camera link 
+  <joint name="base_link__camera1" type="fixed">
+    <origin rpy="0 0 0" xyz= " 0.9 0.15 0.03"/> 
+    <parent link="base_link"/>
+    <child link="camera_1"/>
+  </joint>
+
+  <link name = "camera_1">
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.0" /> 
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+          </visual>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+  
+  <gazebo reference="camera_1">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  -->
+  
+ <!-- Base camera link -->
+  <joint name="link_03__camera2" type="fixed">
+    <axis xyz="0 1 0"/>
+    <origin rpy="0 -1.57 0" xyz= " 0.07 0 0.25"/> 
+    <parent link="link_03"/>
+    <child link="camera_2"/>
+  </joint>
+
+  <link name = "camera_2">
+          <visual>
+            <origin rpy="0 0 0" xyz="0 0 0.0" /> 
+            <geometry>
+                <box size="0.05 0.05 0.05"/>
+            </geometry>
+          </visual>
+  <xacro:inertial_matrix mass="1"/>
+  </link>
+
+  <gazebo reference="camera_2">
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+   <!-- camera -->
+  <gazebo reference="camera_2">
+    <sensor type="multicamera" name="stereo_camera">
+        <update_rate>30</update_rate>
+        <camera name="left">
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <camera name="right">
+          <pose>0 -0.07 0 0 0 0</pose>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <plugin name="stereo_camera_controller" filename="libgazebo_ros_multicamera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>sricam</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <leftframeName>left_camera_optical_frame</leftframeName>
+          <rightFrameName>right_camera_optical_frame</rightFrameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+  </gazebo> 
+
+  
+
+  <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+  <!-- Transmissions for ROS Control -->
+
+   <xacro:transmission_block joint_name="base_link__link_01"/>
+   <xacro:transmission_block joint_name="link_01__link_02"/>
+   <xacro:transmission_block joint_name="link_02__link_03"/>
+   <xacro:transmission_block joint_name="link_03__link_04"/>
+   <xacro:transmission_block joint_name="finger_joint1"/>
+   <xacro:transmission_block joint_name="finger_joint2"/>
+	
+
+ <gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+  <robotNamespace>/mrm</robotNamespace>
+  </plugin>
+ </gazebo>
+
+</robot>
